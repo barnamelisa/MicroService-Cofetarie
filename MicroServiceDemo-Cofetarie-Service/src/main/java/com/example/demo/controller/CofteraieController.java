@@ -20,8 +20,12 @@ public class CofteraieController {
     @GetMapping("/{id}")
     public ResponseEntity<CofetarieDTO> getCofetarieDetails(@PathVariable("id") int id) {
         CofetarieDTO cofetarieDTO = cofetarieService.getCofetarieById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(cofetarieDTO);
+        if (cofetarieDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(cofetarieDTO);
     }
+
 
     @GetMapping
     public ResponseEntity<List<CofetarieDTO>> getAllCofetarii() {
