@@ -1,10 +1,13 @@
 package com.example.demo.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CofetarieDTO {
     private int id_cofetarie;
+    @JsonProperty("address")
     private String adresa_cofetarie;
 
     public int getId() {
