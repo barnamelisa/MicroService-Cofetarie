@@ -12,10 +12,10 @@ public class CofetarieConfig {
     @Value("${addressservice.base.url}")
     private String addressBaseUrl;
 
-    @Bean
-    public CofetarieService cofetarieBean() {
-        return new CofetarieService();
-    }
+//    @Bean
+//    public CofetarieService cofetarieBean() {
+//        return new CofetarieService();
+//    }
 
     @Bean
     public ModelMapper modelMapperBean() {
