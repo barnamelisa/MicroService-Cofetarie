@@ -33,5 +33,23 @@ public class CofteraieController {
         return ResponseEntity.ok(cofetarieDTOList);
     }
 
+    @PostMapping
+    public ResponseEntity<CofetarieDTO> addCofetarie(@RequestBody CofetarieDTO dto) {
+        CofetarieDTO created = cofetarieService.addCofetarie(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CofetarieDTO> updateCofetarie(@PathVariable int id, @RequestBody CofetarieDTO dto) {
+        CofetarieDTO updated = cofetarieService.updateCofetarie(id, dto);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCofetarie(@PathVariable int id) {
+        boolean deleted = cofetarieService.deleteCofetarie(id);
+        if (!deleted) return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
 }
