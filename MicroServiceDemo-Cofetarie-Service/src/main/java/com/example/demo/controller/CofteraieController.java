@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/cofetarie")
 public class CofteraieController {
@@ -48,6 +48,7 @@ public class CofteraieController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCofetarie(@PathVariable int id) {
+        System.out.println("Received DELETE for id: " + id);
         boolean deleted = cofetarieService.deleteCofetarie(id);
         if (!deleted) return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
