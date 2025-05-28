@@ -2,8 +2,11 @@ package com.example.demo.service;
 
 
 import com.example.demo.domain.entity.Cofetarie;
+import com.example.demo.factory.CofetarieFactory;
 import com.example.demo.infrastructure.repository.CofetarieRepo;
 import com.example.demo.domain.dto.CofetarieDTO;
+import com.example.demo.observer.AuditLogger;
+import com.example.demo.observer.EventNotifier;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ public class CofetarieService {
 
     @Autowired
     private ModelMapper mapper;
+    private final EventNotifier notifier = new EventNotifier();
 
     public CofetarieDTO getCofetarieById(int id) {
         Optional<Cofetarie> cofetarie = cofetarieRepo.findById(id);
@@ -40,6 +44,7 @@ public class CofetarieService {
         mapper.typeMap(Cofetarie.class, CofetarieDTO.class).addMappings(m ->
                 m.map(Cofetarie::getAdresaCofetarie, CofetarieDTO::setAddress)
         );
+        notifier.register(AuditLogger.getInstance());
     }
 
     public List<CofetarieDTO> getAllCofetarii() {
@@ -50,8 +55,9 @@ public class CofetarieService {
     }
 
     public CofetarieDTO addCofetarie(CofetarieDTO dto) {
-        Cofetarie entity = mapper.map(dto, Cofetarie.class);
+        Cofetarie entity = CofetarieFactory.createFromDTO(dto);
         Cofetarie saved = cofetarieRepo.save(entity);
+        notifier.notifyObservers("Cofetarie adaugată: " + saved.getAdresaCofetarie());
         return mapper.map(saved, CofetarieDTO.class);
     }
 
@@ -69,6 +75,7 @@ public class CofetarieService {
     public boolean deleteCofetarie(int id) {
         if (cofetarieRepo.existsById(id)) {
             cofetarieRepo.deleteById(id);
+            notifier.notifyObservers("Cofetarie ștearsă");
             return true;
         }
         return false;
